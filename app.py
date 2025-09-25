@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import requests
 import os
 from coinSlugNames import coin_symbol_to_slug_map
@@ -60,8 +60,13 @@ def get_active_buy_urls():
 
 @app.route('/get-active-converter-urls', methods=['GET'])
 def get_active_converter_urls():
+    currency = request.args.get('currency', 'inr').lower()
+
+    if not currency.isalnum() or len(currency) > 10:
+        return jsonify({'error': 'Invalid currency format. Use alphanumeric characters only, max 10 characters.'}), 400
+
     active_coin_slugs = get_active_coin_slugs()
-    return jsonify([f"https://mudrex.com/converter/{slug.lower()}/inr" for slug in active_coin_slugs])
+    return jsonify([f"https://mudrex.com/converter/{slug.lower()}/{currency}" for slug in active_coin_slugs])
 
 
 if __name__ == '__main__':
