@@ -1,13 +1,6 @@
-from flask import Flask, send_file, make_response, request, jsonify
+from flask import Flask, jsonify
 import requests
-import pandas as pd
-from datetime import datetime
-import io
 import os
-import pytz
-import gspread
-import json
-import base64
 from coinSlugNames import coin_symbol_to_slug_map
 
 
